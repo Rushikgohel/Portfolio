@@ -58,7 +58,7 @@ function NavBar() {
                 <AiOutlineHome style={{ marginBottom: "2px" }} /> Home
               </Nav.Link>
             </Nav.Item>
-            <ImBlog />
+           
 
             <Nav.Item>
               <Nav.Link
