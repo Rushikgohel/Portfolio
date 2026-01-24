@@ -6,7 +6,7 @@ import logo from "../Assets/logo1.png";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import { CgGitFork } from "react-icons/cg";
-import { ImBlog } from "react-icons/im";
+
 import {
   AiFillStar,
   AiOutlineHome,
@@ -58,6 +58,7 @@ function NavBar() {
                 <AiOutlineHome style={{ marginBottom: "2px" }} /> Home
               </Nav.Link>
             </Nav.Item>
+            <ImBlog />
 
             <Nav.Item>
               <Nav.Link
