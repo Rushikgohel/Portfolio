@@ -92,12 +92,7 @@ function Services() {
       icon: <FaLinkedinIn />,
       href: "https://www.linkedin.com/in/rushik-gohel/",
       label: "LinkedIn",
-    },
-    {
-      icon: <AiFillInstagram />,
-      href: "https://www.instagram.com/rushikgohel",
-      label: "Instagram",
-    },
+    }
   ];
 
   return (

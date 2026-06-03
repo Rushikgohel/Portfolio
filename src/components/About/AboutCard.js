@@ -25,8 +25,30 @@ function AboutCard() {
 
           <div>
             <p>
-              I am 1.5 years of experience in software development in Rokad group and frontend development and backend development skills.
-              full stack development work and task in react js, Tailwind CSS, Django(Python) and mysql database.
+              I am a Software Developer with 1.5 years of experience in Full-Stack Development. I have worked on developing and maintaining web applications, handling both frontend and backend development responsibilities.During my professional journey at Rokad Group, I gained hands-on experience in building responsive and user-friendly applications using React.js, Tailwind CSS, Django (Python), and MySQL. I have been involved in designing user interfaces, developing REST APIs, database management, bug fixing, and implementing new features based on business requirements.
+            </p>
+            <p>
+              Additionally, I have experience working on freelance projects where I delivered customized web solutions for clients, enhancing my problem-solving, communication, and project management skills.Currently, I am pursuing a .NET Development Internship at Prompt ERP IT Company, where I am expanding my expertise in ASP.NET, C#, SQL Server, and enterprise-level application development.
+            </p>
+
+            <br />
+
+            <p>
+              Technical Skills
+              <br />
+              Frontend: React.js, JavaScript, HTML5, CSS3, Tailwind CSS, Bootstrap
+              <br />
+              Backend: Django (Python), ASP.NET, C#
+              <br />
+              Databases: MySQL, SQL Server
+              <br />
+              Tools & Technologies: Git, GitHub, REST APIs, VS Code
+            </p>
+
+            <br />
+
+            <p>
+              I am passionate about building scalable web applications, learning new technologies, and contributing to innovative software solutions. I continuously strive to improve my technical skills and deliver high-quality software that creates real business value.
             </p>
           </div>
 
@@ -39,7 +61,7 @@ function AboutCard() {
             </li>
           </ul>
 
-          
+
 
           <p style={{ color: "rgb(155 126 172)" }}>
             "Strive to build things that make a difference!"{" "}
