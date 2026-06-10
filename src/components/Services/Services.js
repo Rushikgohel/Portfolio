@@ -12,7 +12,6 @@ import {
 import {
   AiFillGithub,
   AiOutlineTwitter,
-  AiFillInstagram,
 } from "react-icons/ai";
 import Particle from "../Particle";
 
