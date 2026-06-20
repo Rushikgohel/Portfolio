@@ -1,123 +1,168 @@
-import React, { useState } from "react";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import Container from "react-bootstrap/Container";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../Assets/logo1.png";
-import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
-import { CgGitFork } from "react-icons/cg";
 
 import {
-  AiFillStar,
   AiOutlineHome,
-  AiOutlineFundProjectionScreen,
   AiOutlineUser,
+  AiOutlineFundProjectionScreen,
+  AiOutlineAppstore,
+  AiFillStar,
 } from "react-icons/ai";
 
-import { CgFileDocument } from "react-icons/cg";
+import { CgFileDocument, CgGitFork } from "react-icons/cg";
+import { HiMenu, HiX } from "react-icons/hi";
 
-function NavBar() {
-  const [expand, updateExpanded] = useState(false);
-  const [navColour, updateNavbar] = useState(false);
+const NavBar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [sticky, setSticky] = useState(false);
+  const location = useLocation();
 
-  function scrollHandler() {
-    if (window.scrollY >= 20) {
-      updateNavbar(true);
-    } else {
-      updateNavbar(false);
-    }
-  }
+  useEffect(() => {
+    const handleScroll = () => {
+      setSticky(window.scrollY > 20);
+    };
 
-  window.addEventListener("scroll", scrollHandler);
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const navLinks = [
+    {
+      name: "Home",
+      path: "/",
+      icon: <AiOutlineHome />,
+    },
+    {
+      name: "About",
+      path: "/about",
+      icon: <AiOutlineUser />,
+    },
+    {
+      name: "Projects",
+      path: "/project",
+      icon: <AiOutlineFundProjectionScreen />,
+    },
+    {
+      name: "Services",
+      path: "/Services",
+      icon: <AiOutlineAppstore />,
+    },
+    {
+      name: "Resume",
+      path: "/resume",
+      icon: <CgFileDocument />,
+    },
+  ];
+
+  const isActive = (path) => {
+    return location.pathname.toLowerCase() === path.toLowerCase();
+  };
 
   return (
-    <Navbar
-      expanded={expand}
-      fixed="top"
-      expand="md"
-      className={navColour ? "sticky" : "navbar"}
+    <nav
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${sticky
+          ? "bg-gray-900 shadow-lg"
+          : "bg-transparent"
+        }`}
     >
-      <Container>
-        <Navbar.Brand href="/" className="d-flex">
-          <img src={logo} className="img-fluid logo h-50 w-50" alt="brand" />
-        </Navbar.Brand>
-        <Navbar.Toggle
-          aria-controls="responsive-navbar-nav"
-          onClick={() => {
-            updateExpanded(expand ? false : "expanded");
-          }}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </Navbar.Toggle>
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="ms-auto" defaultActiveKey="#home">
-            <Nav.Item>
-              <Nav.Link as={Link} to="/" onClick={() => updateExpanded(false)}>
-                <AiOutlineHome style={{ marginBottom: "2px" }} /> Home
-              </Nav.Link>
-            </Nav.Item>
-           
+      <div className="max-w-7xl mx-auto px-6">
 
-            <Nav.Item>
-              <Nav.Link
-                as={Link}
-                to="/about"
-                onClick={() => updateExpanded(false)}
-              >
-                <AiOutlineUser style={{ marginBottom: "2px" }} /> About
-              </Nav.Link>
-            </Nav.Item>
+        <div className="flex justify-between items-center h-20">
 
-            <Nav.Item>
-              <Nav.Link
-                as={Link}
-                to="/project"
-                onClick={() => updateExpanded(false)}
-              >
-                <AiOutlineFundProjectionScreen
-                  style={{ marginBottom: "2px" }}
-                />{" "}
-                Projects
-              </Nav.Link>
-            </Nav.Item>
+          {/* Logo */}
 
-            <Nav.Item>
-              <Nav.Link
-                as={Link}
-                to="/resume"
-                onClick={() => updateExpanded(false)}
-              >
-                <CgFileDocument style={{ marginBottom: "2px" }} /> Resume
-              </Nav.Link>
-            </Nav.Item>
+          <Link
+            to="/"
+            className="flex items-center space-x-3"
+          >
+            <img
+              src={logo}
+              alt="Logo"
+              className="h-12 w-12 object-contain"
+            />
 
-            <Nav.Item>
-              <Nav.Link
-                as={Link}
-                to="/Services"
-                onClick={() => updateExpanded(false)}
-              >
-                <CgFileDocument style={{ marginBottom: "2px" }} /> Service
-              </Nav.Link>
-            </Nav.Item>
 
-            <Nav.Item className="fork-btn">
-              <Button
-                href="https://github.com/rushikgohel/Portfolio"
-                target="_blank"
-                className="fork-btn-inner"
+          </Link>
+
+          {/* Desktop Menu */}
+
+          <div className="hidden md:flex items-center space-x-8">
+
+            {navLinks.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className={`flex items-center gap-2 text-lg font-medium transition duration-300 ${isActive(item.path)
+                    ? "nav-link-active-blink"
+                    : "text-white hover:text-purple-400"
+                  }`}
               >
-                <CgGitFork style={{ fontSize: "1.2em" }} />{" "}
-                <AiFillStar style={{ fontSize: "1.1em" }} />
-              </Button>
-            </Nav.Item>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+                {item.icon}
+                {item.name}
+              </Link>
+            ))}
+
+          </div>
+
+          {/* GitHub Button */}
+
+          <a
+            href="https://github.com/rushikgohel/Portfolio"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:flex items-center gap-2 bg-purple-600 hover:bg-purple-700 px-5 py-2 rounded-full text-white transition"
+          >
+            <CgGitFork />
+            <AiFillStar />
+          </a>
+
+          {/* Mobile Button */}
+
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden text-white text-3xl"
+          >
+            {isOpen ? <HiX /> : <HiMenu />}
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+
+        {isOpen && (
+          <div className="md:hidden bg-gray-900 rounded-lg pb-5">
+
+            {navLinks.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                onClick={() => setIsOpen(false)}
+                className={`flex items-center gap-3 px-6 py-4 text-lg ${isActive(item.path)
+                    ? "nav-link-active-blink"
+                    : "text-white"
+                  }`}
+              >
+                {item.icon}
+                {item.name}
+              </Link>
+            ))}
+
+            <a
+              href="https://github.com/rushikgohel/Portfolio"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mx-6 mt-3 flex justify-center items-center gap-2 bg-purple-600 py-3 rounded-lg text-white"
+            >
+              <CgGitFork />
+              <AiFillStar />
+            </a>
+
+          </div>
+        )}
+      </div>
+    </nav>
   );
-}
+};
 
 export default NavBar;

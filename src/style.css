@@ -759,3 +759,43 @@ button:focus {
 .fork-btn-inner::after {
   display: none !important;
 }
+
+/* Brand Name next to logo icon */
+.brand-name {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  color: #c770f0 !important;
+  text-shadow: 0 0 10px rgba(199, 112, 240, 0.3);
+  letter-spacing: 1.5px;
+  background: linear-gradient(45deg, #ffffff, #c770f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.brand-name:hover {
+  text-shadow: 0 0 15px rgba(199, 112, 240, 0.7);
+  background: linear-gradient(45deg, #c770f0, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Active Nav Link Blinking/Glowing Pulse Effect (Tailwind Navbar Compatibility) */
+.nav-link-active-blink {
+  color: #c084fc !important; /* Tailwind's text-purple-400 */
+  animation: active-text-pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes active-text-pulse {
+  0%, 100% {
+    opacity: 0.7;
+    text-shadow: 0 0 4px rgba(192, 132, 252, 0.4);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 12px rgba(192, 132, 252, 0.8), 0 0 20px rgba(192, 132, 252, 0.5);
+  }
+}
+
+
+

@@ -1,5 +1,5 @@
-import React from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
+import React, { useState } from "react";
+import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import {
   FaCode,
   FaMobileAlt,
@@ -12,10 +12,66 @@ import {
 import {
   AiFillGithub,
   AiOutlineTwitter,
+  AiFillInstagram
 } from "react-icons/ai";
 import Particle from "../Particle";
 
 function Services() {
+  const [formData, setFormData] = useState({
+    username: "",
+    mobile: "",
+    email: "",
+    city: "",
+    businessType: "Startup",
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch("https://formsubmit.co/ajax/rushikgohel906@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          Name: formData.username,
+          "Mobile Number": formData.mobile,
+          "Email Address": formData.email,
+          City: formData.city,
+          "Business Type": formData.businessType,
+          _subject: `New Portfolio Service Query from ${formData.username}`
+        })
+      });
+
+      const result = await response.json();
+      if (response.ok && result.success === "true") {
+        setSubmitted(true);
+      } else {
+        setError(result.message || "Failed to send message. Please try again later.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("An error occurred. Please check your internet connection.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const services = [
     {
       icon: <FaCode />,
@@ -76,28 +132,11 @@ function Services() {
     },
   ];
 
-  const socialLinks = [
-    {
-      icon: <AiFillGithub />,
-      href: "https://github.com/rushikgohel",
-      label: "GitHub",
-    },
-    {
-      icon: <AiOutlineTwitter />,
-      href: "https://twitter.com/rushikgohel",
-      label: "Twitter",
-    },
-    {
-      icon: <FaLinkedinIn />,
-      href: "https://www.linkedin.com/in/rushik-gohel/",
-      label: "LinkedIn",
-    }
-  ];
 
   return (
     <section>
       {/* ── Services Hero ── */}
-      <Container fluid className="services-section py-5" id="services">
+      <Container fluid className="services-section py-10  pt-20" id="services">
         <Particle />
 
         <Container>
@@ -287,35 +326,301 @@ function Services() {
               </Col>
             ))}
           </Row>
+
+          {/* ── Divider ── */}
+          <hr
+            style={{
+              borderColor: "rgba(199, 112, 240, 0.15)",
+              margin: "3rem 0 3rem",
+            }}
+          />
+
+          {/* ── Contact Form ── */}
+          <div className="text-center mb-2">
+            <span
+              style={{
+                display: "inline-block",
+                background: "rgba(199, 112, 240, 0.12)",
+                color: "#c770f0",
+                fontSize: "12px",
+                fontWeight: "500",
+                letterSpacing: "0.06em",
+                padding: "5px 16px",
+                borderRadius: "20px",
+                border: "1px solid rgba(199, 112, 240, 0.35)",
+              }}
+            >
+              Get in touch
+            </span>
+          </div>
+
+          <h2 className="project-heading text-center mb-4 purple" style={{ fontWeight: "600" }}>
+            Contact Us
+          </h2>
+
+          <Row className="justify-content-center">
+            <Col md={8} lg={6}>
+              <Card
+                className="border-0 text-start"
+                style={{
+                  background: "rgba(255, 255, 255, 0.03)",
+                  border: "1px solid rgba(199, 112, 240, 0.15)",
+                  borderRadius: "16px",
+                  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+                  backdropFilter: "blur(10px)",
+                  WebkitBackdropFilter: "blur(10px)",
+                  padding: "1.5rem",
+                }}
+              >
+                <Card.Body className="p-2">
+                  {submitted ? (
+                    <div className="text-center py-4">
+                      <h4 className="text-success mb-3" style={{ fontSize: "1.3rem" }}>✓ Message Sent Successfully!</h4>
+                      <p style={{ color: "#b0b0b0", fontSize: "0.95rem" }}>
+                        Thank you, <strong className="purple">{formData.username}</strong>. We will get back to you shortly.
+                      </p>
+                      <Button
+                        onClick={() => {
+                          setSubmitted(false);
+                          setFormData({ username: "", mobile: "", email: "", city: "", businessType: "Startup" });
+                        }}
+                        style={{
+                          background: "linear-gradient(45deg, #a24dd3, #c770f0)",
+                          border: "none",
+                          borderRadius: "8px",
+                          padding: "8px 20px",
+                          fontSize: "0.9rem",
+                        }}
+                      >
+                        Send Another Message
+                      </Button>
+                    </div>
+                  ) : (
+                    <Form onSubmit={handleSubmit}>
+                      {error && (
+                        <div className="alert alert-danger text-center p-2 mb-3" style={{ fontSize: "0.9rem", borderRadius: "10px", background: "rgba(220, 53, 69, 0.1)", border: "1px solid rgba(220, 53, 69, 0.3)", color: "#ea868f" }}>
+                          {error}
+                        </div>
+                      )}
+
+                      <Form.Group className="mb-3" controlId="formUsername">
+                        <Form.Label style={{ color: "#ffffff", fontSize: "0.9rem" }}>Name</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="username"
+                          value={formData.username}
+                          onChange={handleChange}
+                          required
+                          disabled={loading}
+                          placeholder="Your Name"
+                          style={{
+                            background: "rgba(255, 255, 255, 0.05)",
+                            border: "1px solid rgba(199, 112, 240, 0.25)",
+                            color: "#ffffff",
+                            borderRadius: "10px",
+                            padding: "0.6rem 0.8rem",
+                            fontSize: "0.92rem",
+                          }}
+                        />
+                      </Form.Group>
+
+                      <Row>
+                        <Col md={6}>
+                          <Form.Group className="mb-3" controlId="formMobile">
+                            <Form.Label style={{ color: "#ffffff", fontSize: "0.9rem" }}>Mobile Number</Form.Label>
+                            <Form.Control
+                              type="tel"
+                              name="mobile"
+                              value={formData.mobile}
+                              onChange={handleChange}
+                              required
+                              disabled={loading}
+                              placeholder="Mobile Number"
+                              style={{
+                                background: "rgba(255, 255, 255, 0.05)",
+                                border: "1px solid rgba(199, 112, 240, 0.25)",
+                                color: "#ffffff",
+                                borderRadius: "10px",
+                                padding: "0.6rem 0.8rem",
+                                fontSize: "0.92rem",
+                              }}
+                            />
+                          </Form.Group>
+                        </Col>
+
+                        <Col md={6}>
+                          <Form.Group className="mb-3" controlId="formEmail">
+                            <Form.Label style={{ color: "#ffffff", fontSize: "0.9rem" }}>Email Address</Form.Label>
+                            <Form.Control
+                              type="email"
+                              name="email"
+                              value={formData.email}
+                              onChange={handleChange}
+                              required
+                              disabled={loading}
+                              placeholder="Email Address"
+                              style={{
+                                background: "rgba(255, 255, 255, 0.05)",
+                                border: "1px solid rgba(199, 112, 240, 0.25)",
+                                color: "#ffffff",
+                                borderRadius: "10px",
+                                padding: "0.6rem 0.8rem",
+                                fontSize: "0.92rem",
+                              }}
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
+
+                      <Row>
+                        <Col md={6}>
+                          <Form.Group className="mb-3" controlId="formCity">
+                            <Form.Label style={{ color: "#ffffff", fontSize: "0.9rem" }}>City</Form.Label>
+                            <Form.Control
+                              type="text"
+                              name="city"
+                              value={formData.city}
+                              onChange={handleChange}
+                              required
+                              disabled={loading}
+                              placeholder="City Name"
+                              style={{
+                                background: "rgba(255, 255, 255, 0.05)",
+                                border: "1px solid rgba(199, 112, 240, 0.25)",
+                                color: "#ffffff",
+                                borderRadius: "10px",
+                                padding: "0.6rem 0.8rem",
+                                fontSize: "0.92rem",
+                              }}
+                            />
+                          </Form.Group>
+                        </Col>
+
+                        <Col md={6}>
+                          <Form.Group className="mb-3" controlId="formBusinessType">
+                            <Form.Label style={{ color: "#ffffff", fontSize: "0.9rem" }}>Business Type</Form.Label>
+                            <Form.Select
+                              name="businessType"
+                              value={formData.businessType}
+                              onChange={handleChange}
+                              disabled={loading}
+                              style={{
+                                background: "rgba(20, 15, 30, 0.95)",
+                                border: "1px solid rgba(199, 112, 240, 0.25)",
+                                color: "#ffffff",
+                                borderRadius: "10px",
+                                padding: "0.6rem 0.8rem",
+                                fontSize: "0.92rem",
+                              }}
+                            >
+                              <option value="Startup">Startup</option>
+                              <option value="Own Business">Own Business</option>
+                            </Form.Select>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+
+                      <div className="text-center mt-4">
+                        <Button
+                          type="submit"
+                          disabled={loading}
+                          className="w-100 py-2"
+                          style={{
+                            background: "linear-gradient(45deg, #a24dd3, #c770f0)",
+                            border: "none",
+                            borderRadius: "10px",
+                            fontWeight: "600",
+                            boxShadow: "0 4px 15px rgba(199, 112, 240, 0.4)",
+                            transition: "all 0.3s ease",
+                            fontSize: "0.95rem",
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!loading) {
+                              e.currentTarget.style.transform = "translateY(-2px)";
+                              e.currentTarget.style.boxShadow = "0 6px 20px rgba(199, 112, 240, 0.6)";
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!loading) {
+                              e.currentTarget.style.transform = "translateY(0)";
+                              e.currentTarget.style.boxShadow = "0 4px 15px rgba(199, 112, 240, 0.4)";
+                            }
+                          }}
+                        >
+                          {loading ? "Sending..." : "Send Message"}
+                        </Button>
+                      </div>
+                    </Form>
+                  )}
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
         </Container>
       </Container>
 
       {/* ── Social Links ── */}
-      <Container>
-        <Row style={{ paddingTop: "50px", paddingBottom: "80px" }}>
-          <Col md={12} className="home-about-social">
-            <h1>Find Me On</h1>
-            <p>
-              Feel free to <span className="purple">connect </span>with me
-            </p>
-            <ul className="home-about-social-links">
-              {socialLinks.map((link, index) => (
-                <li className="social-icons" key={index}>
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="icon-colour home-social-icons"
-                    aria-label={link.label}
-                  >
-                    {link.icon}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </Col>
-        </Row>
-      </Container>
+      <div className="py-16">
+        <div className="max-w-6xl mx-auto text-center px-4">
+
+          <h1 className="text-4xl font-bold text-white">
+            Find Me On
+          </h1>
+
+          <p className="mt-3 text-gray-300 text-lg">
+            Feel free to{" "}
+            <span className="text-purple-500 font-semibold">
+              connect
+            </span>{" "}
+            with me
+          </p>
+
+          <div className="flex justify-center items-center gap-6 mt-8 flex-wrap">
+
+            {/* GitHub */}
+            <a
+              href="https://github.com/rushikgohel"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-14 h-14 flex items-center justify-center rounded-full bg-gray-800 text-white text-2xl hover:bg-purple-600 hover:scale-110 duration-300 shadow-lg"
+            >
+              <AiFillGithub />
+            </a>
+
+            {/* Twitter */}
+            <a
+              href="https://twitter.com/rushikgohel"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-14 h-14 flex items-center justify-center rounded-full bg-gray-800 text-white text-2xl hover:bg-purple-600 hover:scale-110 duration-300 shadow-lg"
+            >
+              <AiOutlineTwitter />
+            </a>
+
+            {/* LinkedIn */}
+            <a
+              href="https://www.linkedin.com/in/rushik-gohel/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-14 h-14 flex items-center justify-center rounded-full bg-gray-800 text-white text-2xl hover:bg-purple-600 hover:scale-110 duration-300 shadow-lg"
+            >
+              <FaLinkedinIn />
+            </a>
+
+            {/* Instagram */}
+            <a
+              href="https://www.instagram.com/rushikgohel"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-14 h-14 flex items-center justify-center rounded-full bg-gray-800 text-white text-2xl hover:bg-purple-600 hover:scale-110 duration-300 shadow-lg"
+            >
+              <AiFillInstagram />
+            </a>
+
+          </div>
+
+        </div>
+      </div>
     </section>
   );
 }
