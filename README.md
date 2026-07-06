@@ -1,2 +1,2 @@
 My Portfolio website create the react + tailwind css.
-rushikportfolio.netlify.app
+https://rushikportfolio.netlify.app
