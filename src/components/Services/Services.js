@@ -23,17 +23,29 @@ function Services() {
     email: "",
     city: "",
     businessType: "Startup",
+    organizationName: "",
+    projectBrief: "",
+    startTimeline: "from tomorrow",
+    howFoundUs: "via blog",
+    file: null,
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const { name, value, files } = e.target;
+    if (name === "file") {
+      setFormData((prev) => ({
+        ...prev,
+        file: files ? files[0] : null,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -42,20 +54,27 @@ function Services() {
     setError("");
 
     try {
+      const submitData = new FormData();
+      submitData.append("Name", formData.username);
+      submitData.append("Mobile Number", formData.mobile);
+      submitData.append("Email Address", formData.email);
+      submitData.append("City", formData.city);
+      submitData.append("Business Type", formData.businessType);
+      submitData.append("Organization Name", formData.organizationName);
+      submitData.append("Project Brief", formData.projectBrief);
+      submitData.append("Start Timeline", formData.startTimeline);
+      submitData.append("How Found Us", formData.howFoundUs);
+      if (formData.file) {
+        submitData.append("Attachment", formData.file);
+      }
+      submitData.append("_subject", `New Portfolio Service Query from ${formData.username}`);
+
       const response = await fetch("https://formsubmit.co/ajax/rushikgohel906@gmail.com", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           "Accept": "application/json"
         },
-        body: JSON.stringify({
-          Name: formData.username,
-          "Mobile Number": formData.mobile,
-          "Email Address": formData.email,
-          City: formData.city,
-          "Business Type": formData.businessType,
-          _subject: `New Portfolio Service Query from ${formData.username}`
-        })
+        body: submitData
       });
 
       const result = await response.json();
@@ -382,7 +401,18 @@ function Services() {
                       <Button
                         onClick={() => {
                           setSubmitted(false);
-                          setFormData({ username: "", mobile: "", email: "", city: "", businessType: "Startup" });
+                          setFormData({
+                            username: "",
+                            mobile: "",
+                            email: "",
+                            city: "",
+                            businessType: "Startup",
+                            organizationName: "",
+                            projectBrief: "",
+                            startTimeline: "from tomorrow",
+                            howFoundUs: "via blog",
+                            file: null,
+                          });
                         }}
                         style={{
                           background: "linear-gradient(45deg, #a24dd3, #c770f0)",
@@ -519,6 +549,146 @@ function Services() {
                           </Form.Group>
                         </Col>
                       </Row>
+
+                      <Row>
+                        <Col md={6}>
+                          <Form.Group className="mb-3" controlId="formOrganizationName">
+                            <Form.Label style={{ color: "#ffffff", fontSize: "0.9rem" }}>Organization Name</Form.Label>
+                            <Form.Control
+                              type="text"
+                              name="organizationName"
+                              value={formData.organizationName}
+                              onChange={handleChange}
+                              required
+                              disabled={loading}
+                              placeholder="Organization Name"
+                              style={{
+                                background: "rgba(255, 255, 255, 0.05)",
+                                border: "1px solid rgba(199, 112, 240, 0.25)",
+                                color: "#ffffff",
+                                borderRadius: "10px",
+                                padding: "0.6rem 0.8rem",
+                                fontSize: "0.92rem",
+                              }}
+                            />
+                          </Form.Group>
+                        </Col>
+
+                        <Col md={6}>
+                          <Form.Group className="mb-3" controlId="formStartTimeline">
+                            <Form.Label style={{ color: "#ffffff", fontSize: "0.9rem" }}>How soon do you want to start?</Form.Label>
+                            <Form.Select
+                              name="startTimeline"
+                              value={formData.startTimeline}
+                              onChange={handleChange}
+                              disabled={loading}
+                              style={{
+                                background: "rgba(20, 15, 30, 0.95)",
+                                border: "1px solid rgba(199, 112, 240, 0.25)",
+                                color: "#ffffff",
+                                borderRadius: "10px",
+                                padding: "0.6rem 0.8rem",
+                                fontSize: "0.92rem",
+                              }}
+                            >
+                              <option value="from tomorrow">From tomorrow</option>
+                              <option value="in few weeks">In few weeks</option>
+                              <option value="in few months">In few months</option>
+                            </Form.Select>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+
+                      <Row>
+                        <Col md={6}>
+                          <Form.Group className="mb-3" controlId="formHowFoundUs">
+                            <Form.Label style={{ color: "#ffffff", fontSize: "0.9rem" }}>How did you find us?</Form.Label>
+                            <Form.Select
+                              name="howFoundUs"
+                              value={formData.howFoundUs}
+                              onChange={handleChange}
+                              disabled={loading}
+                              style={{
+                                background: "rgba(20, 15, 30, 0.95)",
+                                border: "1px solid rgba(199, 112, 240, 0.25)",
+                                color: "#ffffff",
+                                borderRadius: "10px",
+                                padding: "0.6rem 0.8rem",
+                                fontSize: "0.92rem",
+                              }}
+                            >
+                              <option value="via blog">Via blog</option>
+                              <option value="via LinkedIn">Via LinkedIn</option>
+                              <option value="via Reference">Via Reference</option>
+                            </Form.Select>
+                          </Form.Group>
+                        </Col>
+
+                        <Col md={6}>
+                          <Form.Group className="mb-3" controlId="formFile">
+                            <Form.Label style={{ color: "#ffffff", fontSize: "0.9rem" }}>Attach File</Form.Label>
+                            <Form.Control
+                              type="file"
+                              name="file"
+                              onChange={handleChange}
+                              disabled={loading}
+                              style={{
+                                background: "rgba(255, 255, 255, 0.05)",
+                                border: "1px solid rgba(199, 112, 240, 0.25)",
+                                color: "#ffffff",
+                                borderRadius: "10px",
+                                padding: "0.55rem 0.8rem",
+                                fontSize: "0.92rem",
+                              }}
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
+
+                      <Form.Group className="mb-3" controlId="formProjectBrief">
+                        <Form.Label style={{ color: "#ffffff", fontSize: "0.9rem" }}>Brief the Project</Form.Label>
+                        <Form.Control
+                          as="textarea"
+                          rows={4}
+                          name="projectBrief"
+                          value={formData.projectBrief}
+                          onChange={handleChange}
+                          required
+                          disabled={loading}
+                          placeholder="Brief description of your project..."
+                          style={{
+                            background: "rgba(255, 255, 255, 0.05)",
+                            border: "1px solid rgba(199, 112, 240, 0.25)",
+                            color: "#ffffff",
+                            borderRadius: "10px",
+                            padding: "0.6rem 0.8rem",
+                            fontSize: "0.92rem",
+                          }}
+                        />
+                      </Form.Group>
+
+                      <div className="mb-3 text-start" style={{ fontSize: "0.82rem", color: "#b0b0b0", lineHeight: "1.5" }}>
+                        <div className="d-flex align-items-start mb-2" style={{ gap: "8px" }}>
+                          <span style={{ color: "#c770f0", fontSize: "1rem" }}>🛡️</span>
+                          <span>We care about your privacy. Your data is 100% safe with us.</span>
+                        </div>
+                        <div className="d-flex align-items-start" style={{ gap: "8px" }}>
+                          <Form.Check
+                            type="checkbox"
+                            id="cookieConsent"
+                            required
+                            defaultChecked
+                            disabled={loading}
+                            label={
+                              <span style={{ color: "#b0b0b0", fontSize: "0.82rem" }}>
+                                By submitting this form you agree to our use of cookies as described in our cookie policy
+                              </span>
+                            }
+                            feedback="You must agree before submitting."
+                            feedbackType="invalid"
+                          />
+                        </div>
+                      </div>
 
                       <div className="text-center mt-4">
                         <Button
